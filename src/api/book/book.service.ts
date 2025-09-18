@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository,  } from '@nestjs/typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Book } from 'src/core/entity/book.entity';
 import { CreateBookDto } from './dto/create-book.dto';
@@ -29,29 +29,34 @@ export class BookService extends BaseService<
   }
 
   async findAllBookFilter(filters: any) {
-  let query = this.bookRepo.createQueryBuilder('book');
+    let query = this.bookRepo.createQueryBuilder('book');
 
-  if (filters.title) {
-    query = query.andWhere('book.title ILIKE :title', { title: `%${filters.title}%` });
+    if (filters.title) {
+      query = query.andWhere('book.title ILIKE :title', {
+        title: `%${filters.title}%`,
+      });
+    }
+
+    if (filters.author) {
+      query = query.andWhere('book.author ILIKE :author', {
+        author: `%${filters.author}%`,
+      });
+    }
+
+    if (filters.year) {
+      query = query.andWhere('book.published_year = :year', {
+        year: filters.year,
+      });
+    }
+
+    if (filters.available !== undefined) {
+      query = query.andWhere('book.available = :available', {
+        available: filters.available === 'true',
+      });
+    }
+
+    return query.getMany();
   }
-
-  if (filters.author) {
-    query = query.andWhere('book.author ILIKE :author', { author: `%${filters.author}%` });
-  }
-
-  if (filters.year) {
-    query = query.andWhere('book.published_year = :year', { year: filters.year });
-  }
-
-  if (filters.available !== undefined) {
-    query = query.andWhere('book.available = :available', {
-      available: filters.available === 'true',
-    });
-  }
-
-  return query.getMany();
-}
-
 
   async updateBook(id: string, dto: UpdateBookDto): Promise<IResponse> {
     const entity = await this.bookRepo.findOne({ where: { id } });

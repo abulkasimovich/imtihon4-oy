@@ -223,7 +223,11 @@ export class AdminController {
   findAllWithPagination(@Query() queryDto: QueryPaginationDto) {
     const { query, page, limit } = queryDto;
     const where = query
-      ? { username: ILike(`%${query}%`), role: AccessRoles.ADMIN, is_deleted: false }
+      ? {
+          username: ILike(`%${query}%`),
+          role: AccessRoles.ADMIN,
+          is_deleted: false,
+        }
       : { role: AccessRoles.ADMIN, is_deleted: false };
     return this.adminService.findAllWithPagination({
       where,
@@ -269,7 +273,7 @@ export class AdminController {
   })
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(AccessRoles.SUPERADMIN)
-   @Get()
+  @Get()
   @ApiBearerAuth()
   findAll() {
     return this.adminService.findAll({

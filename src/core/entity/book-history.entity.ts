@@ -5,7 +5,9 @@ import { ReaderEntity } from 'src/core/entity/reader.entity';
 
 @Entity('book_history')
 export class BookHistory extends BaseEntity {
-  @ManyToOne(() => ReaderEntity, (reader) => reader.bookHistories, { onDelete: 'CASCADE' })
+  @ManyToOne(() => ReaderEntity, (reader) => reader.bookHistories, {
+    onDelete: 'CASCADE',
+  })
   readerId: string;
 
   @ManyToOne(() => Book, (book) => book.bookHistories, { onDelete: 'CASCADE' })

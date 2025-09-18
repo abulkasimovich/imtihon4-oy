@@ -2,16 +2,21 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsNotEmpty, IsUUID } from 'class-validator';
 
 export class CreateBorrowDto {
-  @ApiProperty({ example: 'c5c9f420-6d5b-11ee-b962-0242ac120002', description: 'Reader ID' })
+  @ApiProperty({
+    example: 'c5c9f420-6d5b-11ee-b962-0242ac120002',
+    description: 'Reader ID',
+  })
   @IsNotEmpty()
   @IsUUID()
   readerId: string;
 
-  @ApiProperty({ example: 'b3b5f1d2-6d5b-11ee-b962-0242ac120002', description: 'Book ID' })
+  @ApiProperty({
+    example: 'b3b5f1d2-6d5b-11ee-b962-0242ac120002',
+    description: 'Book ID',
+  })
   @IsNotEmpty()
   @IsUUID()
   bookId: string;
-
 
   @ApiProperty({
     description: 'Borrow date (ISO format)',

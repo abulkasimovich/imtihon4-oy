@@ -50,14 +50,20 @@ export class LibrarianController {
   @ApiOperation({ summary: 'Sign in librarian' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Librarian signed in' })
   @Post('signin')
-  signIn(@Body() dto: CreateLibrarianDto, @Res({ passthrough: true }) res: Response) {
+  signIn(
+    @Body() dto: CreateLibrarianDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     return this.librarianService.signIn(dto, res);
   }
 
   @ApiOperation({ summary: 'Get new access token' })
   @Post('token')
   newToken(@CookieGetter('librarianToken') token: string) {
-    return this.authService.newToken(this.librarianService.getRepository, token);
+    return this.authService.newToken(
+      this.librarianService.getRepository,
+      token,
+    );
   }
 
   @ApiOperation({ summary: 'Sign out librarian' })
@@ -108,7 +114,10 @@ export class LibrarianController {
   @ApiBearerAuth()
   async softDelete(@Param('id', ParseUUIDPipe) id: string) {
     await this.librarianService.findOneById(+id);
-    await this.librarianService.getRepository.update({ id }, { is_deleted: true });
+    await this.librarianService.getRepository.update(
+      { id },
+      { is_deleted: true },
+    );
     return this.librarianService.findOneById(+id);
   }
 

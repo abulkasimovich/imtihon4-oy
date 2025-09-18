@@ -20,7 +20,6 @@ import { CreateReaderDto } from './dto/create-reader.dto';
 import { UpdateReaderDto } from './dto/update-reader.dto';
 import { Response } from 'express';
 
-
 @Injectable()
 export class ReaderService extends BaseService<
   CreateReaderDto,
@@ -28,7 +27,8 @@ export class ReaderService extends BaseService<
   ReaderEntity
 > {
   constructor(
-    @InjectRepository(ReaderEntity) private readonly readerRepo: ReaderRepository,
+    @InjectRepository(ReaderEntity)
+    private readonly readerRepo: ReaderRepository,
     private readonly crypto: CryptoService,
     private readonly tokenService: TokenService,
   ) {
@@ -36,26 +36,28 @@ export class ReaderService extends BaseService<
   }
 
   async onModuleInit(): Promise<void> {
-  try {
-    const existsReader = await this.readerRepo.findOne({
-      where: { role: AccessRoles.READER },
-    });
-    if (!existsReader) {
-      const hashedPassword = await this.crypto.encrypt(config.READER_PASSWORD);
-      const reader = this.readerRepo.create({
-        email: config.READER_EMAIL,
-        hashed_password: hashedPassword,
-        role: AccessRoles.READER,
-        full_name: config.READER_FULLNAME,
+    try {
+      const existsReader = await this.readerRepo.findOne({
+        where: { role: AccessRoles.READER },
       });
-      await this.readerRepo.save(reader);
-      console.log('Reader created successfully');
+      if (!existsReader) {
+        const hashedPassword = await this.crypto.encrypt(
+          config.READER_PASSWORD,
+        );
+        const reader = this.readerRepo.create({
+          email: config.READER_EMAIL,
+          hashed_password: hashedPassword,
+          role: AccessRoles.READER,
+          full_name: config.READER_FULLNAME,
+        });
+        await this.readerRepo.save(reader);
+        console.log('Reader created successfully');
+      }
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException('Error on creating reader');
     }
-  } catch (error) {
-    console.error(error); 
-    throw new InternalServerErrorException('Error on creating reader');
   }
-}
 
   async createReader(createDto: CreateReaderDto) {
     const { full_name, password } = createDto;
@@ -110,7 +112,11 @@ export class ReaderService extends BaseService<
 
     await this.readerRepo.update(
       { id },
-      { full_name, is_active: is_active ?? reader.is_active, hashed_password: hashed },
+      {
+        full_name,
+        is_active: is_active ?? reader.is_active,
+        hashed_password: hashed,
+      },
     );
     return this.findOneById(+id);
   }

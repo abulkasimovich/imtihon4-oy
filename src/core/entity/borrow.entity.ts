@@ -5,8 +5,10 @@ import { Book } from 'src/core/entity/book.entity';
 
 @Entity('borrow')
 export class Borrow extends BaseEntity {
-  @ManyToOne(() => ReaderEntity, (reader) => reader.borrows, { onDelete: 'CASCADE' })
-  reader: ReaderEntity;;
+  @ManyToOne(() => ReaderEntity, (reader) => reader.borrows, {
+    onDelete: 'CASCADE',
+  })
+  reader: ReaderEntity;
 
   @ManyToOne(() => Book, (book) => book.borrows, { onDelete: 'CASCADE' })
   book: Book;

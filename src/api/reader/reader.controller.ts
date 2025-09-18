@@ -50,7 +50,10 @@ export class ReaderController {
   @ApiOperation({ summary: 'Sign in reader' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Reader signed in' })
   @Post('signin')
-  signIn(@Body() dto: CreateReaderDto, @Res({ passthrough: true }) res: Response) {
+  signIn(
+    @Body() dto: CreateReaderDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     return this.readerService.signIn(dto, res);
   }
 

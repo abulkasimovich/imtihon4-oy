@@ -45,8 +45,8 @@ export class AdminService
 
         const superadmin = this.adminRepo.create({
           username: config.ADMIN_USERNAME,
-          email: config.ADMIN_EMAIL,           
-          full_name: config.ADMIN_FULLNAME,    
+          email: config.ADMIN_EMAIL,
+          full_name: config.ADMIN_FULLNAME,
           hashed_password: hashedPassword,
           role: AccessRoles.SUPERADMIN,
           is_active: true,
@@ -65,7 +65,9 @@ export class AdminService
   async createAdmin(createAdminDto: CreateAdminDto) {
     const { username, password, email, full_name } = createAdminDto;
 
-    const existsUsername = await this.adminRepo.findOne({ where: { username } });
+    const existsUsername = await this.adminRepo.findOne({
+      where: { username },
+    });
     if (existsUsername) throw new ConflictException('Username already exists');
 
     const existsEmail = await this.adminRepo.findOne({ where: { email } });
@@ -122,7 +124,9 @@ export class AdminService
     if (!admin) throw new NotFoundException('Admin not found');
 
     if (username) {
-      const existsUsername = await this.adminRepo.findOne({ where: { username } });
+      const existsUsername = await this.adminRepo.findOne({
+        where: { username },
+      });
       if (existsUsername && existsUsername.id !== id) {
         throw new ConflictException('Username already exists');
       }

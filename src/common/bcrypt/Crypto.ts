@@ -11,4 +11,3 @@ export class CryptoService {
     return compare(data, encryptedData);
   }
 }
-

@@ -28,7 +28,9 @@ export class BookHistoryService extends BaseService<
   }
 
   async create(dto: CreateBookHistoryDto): Promise<IResponse> {
-    const reader = await this.readerRepo.findOne({ where: { id: dto.readerId } });
+    const reader = await this.readerRepo.findOne({
+      where: { id: dto.readerId },
+    });
     if (!reader) throw new NotFoundException('Reader not found');
 
     const book = await this.bookRepo.findOne({ where: { id: dto.bookId } });
@@ -43,13 +45,13 @@ export class BookHistoryService extends BaseService<
 
     await this.historyRepo.save(entity);
 
-    return getSuccessRes(
-      { ...entity, reader, book },
-      201,
-    );
+    return getSuccessRes({ ...entity, reader, book }, 201);
   }
 
-  async updateBookHistory(id: string, dto: UpdateBookHistoryDto): Promise<IResponse> {
+  async updateBookHistory(
+    id: string,
+    dto: UpdateBookHistoryDto,
+  ): Promise<IResponse> {
     const entity = await this.historyRepo.findOne({ where: { id } });
     if (!entity) throw new NotFoundException('BookHistory not found');
 
@@ -73,8 +75,11 @@ export class BookHistoryService extends BaseService<
 
     return getSuccessRes({
       ...entity,
-      reader: reader ?? (await this.readerRepo.findOne({ where: { id: entity.readerId } })),
-      book: book ?? (await this.bookRepo.findOne({ where: { id: entity.bookId } })),
+      reader:
+        reader ??
+        (await this.readerRepo.findOne({ where: { id: entity.readerId } })),
+      book:
+        book ?? (await this.bookRepo.findOne({ where: { id: entity.bookId } })),
     });
   }
 }

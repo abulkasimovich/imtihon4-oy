@@ -7,7 +7,6 @@ import {
   MinLength,
 } from 'class-validator';
 
-
 export class CreateAdminDto {
   @ApiProperty({
     type: 'string',

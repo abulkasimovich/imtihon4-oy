@@ -54,7 +54,12 @@ export class BookController {
     @Query('year') year?: number,
     @Query('available') available?: boolean,
   ) {
-    return this.bookService.findAllBookFilter({ title, author, year, available });
+    return this.bookService.findAllBookFilter({
+      title,
+      author,
+      year,
+      available,
+    });
   }
 
   @Get(':id')

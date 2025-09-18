@@ -23,7 +23,7 @@ export class ReaderEntity extends BaseEntity {
 
   @Column({ type: 'enum', enum: AccessRoles, default: AccessRoles.READER })
   role: AccessRoles;
-  
+
   @OneToMany(() => Borrow, (borrow) => borrow.reader)
   borrows: Borrow[];
 

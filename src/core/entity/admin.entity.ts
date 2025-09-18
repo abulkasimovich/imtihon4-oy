@@ -12,7 +12,7 @@ export class AdminEntity {
   email: string;
 
   @Column()
-  hashed_password: string; 
+  hashed_password: string;
 
   @Column({ type: 'boolean', default: true })
   is_active: boolean;

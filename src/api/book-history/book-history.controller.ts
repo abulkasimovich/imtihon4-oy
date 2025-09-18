@@ -49,7 +49,10 @@ export class BookHistoryController {
   @Get(':id')
   @Roles(AccessRoles.ADMIN, AccessRoles.LIBRARIAN)
   @ApiOperation({ summary: 'Get BookHistory by id' })
-  @ApiResponse({ status: 200, description: 'BookHistory retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'BookHistory retrieved successfully',
+  })
   findOne(@Param('id', ParseIntPipe) id: number): Promise<IResponse> {
     return this.bookHistoryService.findOneById(id);
   }

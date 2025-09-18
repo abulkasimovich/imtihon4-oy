@@ -20,7 +20,7 @@ export const config = {
   ADMIN_PASSWORD: String(process.env.SUPER_ADMIN_PASSWORD),
   ADMIN_EMAIL: process.env.ADMIN_EMAIL || 'eshmat@example.com',
   ADMIN_FULLNAME: process.env.ADMIN_FULLNAME || 'Eshmat Teshayev',
-  
+
   LIBRARIAN_USERNAME: process.env.LIBRARIAN_USERNAME || 'Abbos',
   LIBRARIAN_PASSWORD: process.env.LIBRARIAN_PASSWORD || '123456',
   LIBRARIAN_EMAIL: process.env.LIBRARIAN_EMAIL || 'abbos123@example.com',

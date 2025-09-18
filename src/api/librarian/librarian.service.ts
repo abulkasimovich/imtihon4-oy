@@ -26,7 +26,8 @@ export class LibrarianService extends BaseService<
   LibrarianEntity
 > {
   constructor(
-    @InjectRepository(LibrarianEntity) private readonly librarianRepo: LibrarianRepository,
+    @InjectRepository(LibrarianEntity)
+    private readonly librarianRepo: LibrarianRepository,
     private readonly crypto: CryptoService,
     private readonly tokenService: TokenService,
   ) {
@@ -34,27 +35,28 @@ export class LibrarianService extends BaseService<
   }
 
   async onModuleInit(): Promise<void> {
-  try {
-    const existsLibrarian = await this.librarianRepo.findOne({
-      where: { role: AccessRoles.LIBRARIAN },
-    });
-    if (!existsLibrarian) {
-      const hashedPassword = await this.crypto.encrypt(config.LIBRARIAN_PASSWORD);
-      const librarian = this.librarianRepo.create({
-        email: config.LIBRARIAN_EMAIL,
-        hashed_password: hashedPassword,
-        role: AccessRoles.LIBRARIAN,
-        full_name: config.LIBRARIAN_FULLNAME,
+    try {
+      const existsLibrarian = await this.librarianRepo.findOne({
+        where: { role: AccessRoles.LIBRARIAN },
       });
-      await this.librarianRepo.save(librarian);
-      console.log('Librarian created successfully');
+      if (!existsLibrarian) {
+        const hashedPassword = await this.crypto.encrypt(
+          config.LIBRARIAN_PASSWORD,
+        );
+        const librarian = this.librarianRepo.create({
+          email: config.LIBRARIAN_EMAIL,
+          hashed_password: hashedPassword,
+          role: AccessRoles.LIBRARIAN,
+          full_name: config.LIBRARIAN_FULLNAME,
+        });
+        await this.librarianRepo.save(librarian);
+        console.log('Librarian created successfully');
+      }
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException('Error on creating librarian');
     }
-  } catch (error) {
-    console.error(error);
-    throw new InternalServerErrorException('Error on creating librarian');
   }
-}
-
 
   async createLibrarian(createDto: CreateLibrarianDto) {
     const { full_name, password } = createDto;
@@ -73,7 +75,9 @@ export class LibrarianService extends BaseService<
 
   async signIn(createDto: CreateLibrarianDto, res: Response) {
     const { full_name, password } = createDto;
-    const librarian = await this.librarianRepo.findOne({ where: { full_name } });
+    const librarian = await this.librarianRepo.findOne({
+      where: { full_name },
+    });
     const isMatch = await this.crypto.decrypt(
       password,
       librarian?.hashed_password || '',
@@ -88,7 +92,12 @@ export class LibrarianService extends BaseService<
     };
     const accessToken = await this.tokenService.accessToken(payload);
     const refreshToken = await this.tokenService.refreshToken(payload);
-    await this.tokenService.writeCookie(res, 'librarianToken', refreshToken, 15);
+    await this.tokenService.writeCookie(
+      res,
+      'librarianToken',
+      refreshToken,
+      15,
+    );
     return successRes({ token: accessToken });
   }
 
@@ -109,7 +118,11 @@ export class LibrarianService extends BaseService<
 
     await this.librarianRepo.update(
       { id },
-      { full_name, is_active: is_active ?? librarian.is_active, hashed_password: hashed },
+      {
+        full_name,
+        is_active: is_active ?? librarian.is_active,
+        hashed_password: hashed,
+      },
     );
     return this.findOneById(+id);
   }
