@@ -1,28 +1,25 @@
-import { Column, Entity, ManyToOne, JoinColumn } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntity } from 'src/common/database/base.entity';
-import { User } from './users.entity';
-import { Book } from './book.entity';
+import { ReaderEntity } from 'src/core/entity/reader.entity';
+import { Book } from 'src/core/entity/book.entity';
 
-@Entity('borrows')
+@Entity('borrow')
 export class Borrow extends BaseEntity {
-  @ManyToOne(() => User, (user) => user.borrows, { onDelete: 'CASCADE' })
-  user: User;
+  @ManyToOne(() => ReaderEntity, (reader) => reader.borrows, { onDelete: 'CASCADE' })
+  reader: ReaderEntity;;
 
   @ManyToOne(() => Book, (book) => book.borrows, { onDelete: 'CASCADE' })
   book: Book;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  borrow_date: Date;
+  borrowDate: Date;
 
   @Column({ type: 'timestamp' })
-  due_date: Date;
+  dueDate: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  return_date: Date;
+  returnDate: Date;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ default: false })
   overdue: boolean;
-
-  @ManyToOne(() => User, (user) => user.borrows, { eager: true })
-  users: User;
 }

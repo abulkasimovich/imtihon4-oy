@@ -18,6 +18,18 @@ export const config = {
 
   ADMIN_USERNAME: String(process.env.SUPER_ADMIN_USERNAME),
   ADMIN_PASSWORD: String(process.env.SUPER_ADMIN_PASSWORD),
+  ADMIN_EMAIL: process.env.ADMIN_EMAIL || 'eshmat@example.com',
+  ADMIN_FULLNAME: process.env.ADMIN_FULLNAME || 'Eshmat Teshayev',
+  
+  LIBRARIAN_USERNAME: process.env.LIBRARIAN_USERNAME || 'Abbos',
+  LIBRARIAN_PASSWORD: process.env.LIBRARIAN_PASSWORD || '123456',
+  LIBRARIAN_EMAIL: process.env.LIBRARIAN_EMAIL || 'abbos123@example.com',
+  LIBRARIAN_FULLNAME: process.env.LIBRARIAN_FULLNAME || 'Abbos Qochqorboyev',
+
+  READER_USERNAME: process.env.READER_USERNAME || 'Vali',
+  READER_PASSWORD: process.env.READER_PASSWORD || '123456',
+  READER_EMAIL: process.env.READER_EMAIL || 'Ali123@gmail.com.com',
+  READER_FULLNAME: process.env.READER_FULLNAME || 'Ali Valiyev',
 
   FILE_PATH: String(process.env.FILE_PATH),
   BASE_URL: String(process.env.BASE_URL),

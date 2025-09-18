@@ -1,6 +1,6 @@
 export enum AccessRoles {
-  SUPER_ADMIN = 'SUPER ADMIN',
+  SUPERADMIN = 'SUPER ADMIN',
   ADMIN = 'ADMIN',
-  LIBARY = 'LIBRARIAN',
+  LIBRARIAN = 'LIBRARIAN',
   READER = 'READER',
 }

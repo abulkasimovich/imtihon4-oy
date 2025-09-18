@@ -1,117 +1,64 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
-  Patch,
   Param,
+  ParseIntPipe,
+  Patch,
   Delete,
-  HttpStatus,
+  Get,
 } from '@nestjs/common';
 import {
-  ApiTags,
+  ApiBearerAuth,
   ApiOperation,
   ApiResponse,
-  ApiBearerAuth,
+  ApiTags,
 } from '@nestjs/swagger';
-import { BookHistoryService } from './book-history.service';
+import { Roles } from 'src/infrastucture/decorator/role.decorator';
+import { AccessRoles } from 'src/common/enum/roles.enum';
+import { IResponse } from 'src/common/interface/response.interface';
 import { CreateBookHistoryDto } from './dto/create-book-history.dto';
 import { UpdateBookHistoryDto } from './dto/update-book-history.dto';
+import { BookHistoryService } from './book-history.service';
 
-@ApiTags('BookHistory')
+@ApiTags('Book-History')
+@ApiBearerAuth()
 @Controller('book-history')
 export class BookHistoryController {
   constructor(private readonly bookHistoryService: BookHistoryService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create new book history record' })
-  @ApiResponse({
-    status: HttpStatus.CREATED,
-    schema: {
-      example: {
-        id: 'uuid',
-        userId: 'uuid',
-        bookId: 'uuid',
-        borrow_date: '2025-09-16T10:00:00.000Z',
-        due_date: '2025-09-23T10:00:00.000Z',
-        return_date: '2025-09-21T14:20:00.000Z',
-        overdue: false,
-      },
-    },
-  })
-  create(@Body() dto: CreateBookHistoryDto) {
+  @Roles(AccessRoles.ADMIN, AccessRoles.LIBRARIAN)
+  @ApiOperation({ summary: 'Create BookHistory (reader_id, book_id)' })
+  @ApiResponse({ status: 201, description: 'BookHistory created successfully' })
+  create(@Body() dto: CreateBookHistoryDto): Promise<IResponse> {
     return this.bookHistoryService.create(dto);
   }
 
-  @Get()
-  @ApiOperation({ summary: 'Get all book history records' })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    schema: {
-      example: [
-        {
-          id: 'uuid',
-          userId: 'uuid',
-          bookId: 'uuid',
-          borrow_date: '2025-09-16T10:00:00.000Z',
-          due_date: '2025-09-23T10:00:00.000Z',
-          return_date: '2025-09-21T14:20:00.000Z',
-          overdue: false,
-        },
-      ],
-    },
-  })
-  findAll() {
-    return this.bookHistoryService.findAll();
-  }
-
-  @Get(':id')
-  @ApiOperation({ summary: 'Get book history record by ID' })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    schema: {
-      example: {
-        id: 'uuid',
-        userId: 'uuid',
-        bookId: 'uuid',
-        borrow_date: '2025-09-16T10:00:00.000Z',
-        due_date: '2025-09-23T10:00:00.000Z',
-        return_date: '2025-09-21T14:20:00.000Z',
-        overdue: false,
-      },
-    },
-  })
-  findOne(@Param('id') id: string) {
-    return this.bookHistoryService.findOne(id);
-  }
-
   @Patch(':id')
-  @ApiOperation({ summary: 'Update book history record' })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    schema: {
-      example: {
-        id: 'uuid',
-        userId: 'uuid',
-        bookId: 'uuid',
-        borrow_date: '2025-09-16T10:00:00.000Z',
-        due_date: '2025-09-23T10:00:00.000Z',
-        return_date: '2025-09-22T12:00:00.000Z',
-        overdue: true,
-      },
-    },
-  })
-  update(@Param('id') id: string, @Body() dto: UpdateBookHistoryDto) {
+  @Roles(AccessRoles.ADMIN, AccessRoles.LIBRARIAN)
+  @ApiOperation({ summary: 'Update BookHistory by id' })
+  @ApiResponse({ status: 200, description: 'BookHistory updated successfully' })
+  updateBookHistory(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateBookHistoryDto,
+  ): Promise<IResponse> {
     return this.bookHistoryService.update(id, dto);
   }
 
+  @Get(':id')
+  @Roles(AccessRoles.ADMIN, AccessRoles.LIBRARIAN)
+  @ApiOperation({ summary: 'Get BookHistory by id' })
+  @ApiResponse({ status: 200, description: 'BookHistory retrieved successfully' })
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<IResponse> {
+    return this.bookHistoryService.findOneById(id);
+  }
+
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete book history record' })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    schema: { example: { message: 'Book history deleted successfully' } },
-  })
-  remove(@Param('id') id: string) {
-    return this.bookHistoryService.remove(id);
+  @Roles(AccessRoles.ADMIN, AccessRoles.LIBRARIAN)
+  @ApiOperation({ summary: 'Delete BookHistory by id' })
+  @ApiResponse({ status: 200, description: 'BookHistory deleted successfully' })
+  remove(@Param('id', ParseIntPipe) id: number): Promise<IResponse> {
+    return this.bookHistoryService.delete(id);
   }
 }

@@ -1,70 +1,64 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
   Param,
-  Delete,
+  ParseIntPipe,
   Patch,
+  Delete,
+  Get,
 } from '@nestjs/common';
-import { BorrowService } from './borrow.service';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { Roles } from 'src/infrastucture/decorator/role.decorator';
+import { AccessRoles } from 'src/common/enum/roles.enum';
+import { IResponse } from 'src/common/interface/response.interface';
 import { CreateBorrowDto } from './dto/create-borrow.dto';
 import { UpdateBorrowDto } from './dto/update-borrow.dto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { BorrowService } from './borrow.service';
 
-@ApiTags('Borrow')
+@ApiTags('Borrows')
+@ApiBearerAuth()
 @Controller('borrows')
 export class BorrowController {
   constructor(private readonly borrowService: BorrowService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Borrow a book' })
-  @ApiResponse({
-    status: 201,
-    description: 'Book borrowed successfully',
-    schema: {
-      example: {
-        id: 'uuid',
-        userId: 'uuid',
-        bookId: 'uuid',
-        borrow_date: '2025-09-16T10:00:00.000Z',
-        due_date: '2025-09-23T10:00:00.000Z',
-        return_date: null,
-        overdue: false,
-      },
-    },
-  })
-  create(@Body() createBorrowDto: CreateBorrowDto) {
-    return this.borrowService.createBorrow(createBorrowDto);
-  }
-
-  @Get()
-  @ApiOperation({ summary: 'Get all borrowed books' })
-  findAll() {
-    return this.borrowService.findAll();
-  }
-
-  @Get(':id')
-  @ApiOperation({ summary: 'Get borrow by ID' })
-  findOne(@Param('id') id: string) {
-    return this.borrowService.findOneById(id);
+  @Roles(AccessRoles.ADMIN, AccessRoles.LIBRARIAN)
+  @ApiOperation({ summary: 'Create Borrow (reader_id, book_id)' })
+  @ApiResponse({ status: 201, description: 'Borrow created successfully' })
+  create(@Body() dto: CreateBorrowDto): Promise<IResponse> {
+    return this.borrowService.create(dto);
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Update borrow by ID' })
-  update(@Param('id') id: string, @Body() updateBorrowDto: UpdateBorrowDto) {
-    return this.borrowService.updateBorrow(id, updateBorrowDto);
+  @Roles(AccessRoles.ADMIN, AccessRoles.LIBRARIAN)
+  @ApiOperation({ summary: 'Update Borrow by id' })
+  @ApiResponse({ status: 200, description: 'Borrow updated successfully' })
+  updateBorrow(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateBorrowDto,
+  ): Promise<IResponse> {
+    return this.borrowService.update(id, dto);
   }
 
-  @Patch(':id/return')
-  @ApiOperation({ summary: 'Return a borrowed book' })
-  returnBook(@Param('id') id: string) {
-    return this.borrowService.returnBook(id);
+  @Get(':id')
+  @Roles(AccessRoles.ADMIN, AccessRoles.LIBRARIAN)
+  @ApiOperation({ summary: 'Get Borrow by id' })
+  @ApiResponse({ status: 200, description: 'Borrow retrieved successfully' })
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<IResponse> {
+    return this.borrowService.findOneById(id);
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete borrow by ID' })
-  remove(@Param('id') id: string) {
-    return this.borrowService.deleteBorrow(id);
+  @Roles(AccessRoles.ADMIN, AccessRoles.LIBRARIAN)
+  @ApiOperation({ summary: 'Delete Borrow by id' })
+  @ApiResponse({ status: 200, description: 'Borrow deleted successfully' })
+  remove(@Param('id', ParseIntPipe) id: number): Promise<IResponse> {
+    return this.borrowService.delete(id);
   }
 }

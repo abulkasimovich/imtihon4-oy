@@ -1,27 +1,22 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntity } from 'src/common/database/base.entity';
-import { User } from './users.entity';
-import { Book } from './book.entity';
+import { Book } from 'src/core/entity/book.entity';
+import { ReaderEntity } from 'src/core/entity/reader.entity';
 
-export enum HistoryAction {
-  BORROW = 'borrow',
-  RETURN = 'return',
-}
-
-@Entity('book_histories')
+@Entity('book_history')
 export class BookHistory extends BaseEntity {
-  @ManyToOne(() => Book, (book) => book.histories, { onDelete: 'CASCADE' })
-  book: Book;
+  @ManyToOne(() => ReaderEntity, (reader) => reader.bookHistories, { onDelete: 'CASCADE' })
+  readerId: string;
 
-  @ManyToOne(() => User, (user) => user.histories, { onDelete: 'CASCADE' })
-  user: User;
-
-  @Column({ type: 'enum', enum: HistoryAction })
-  action: HistoryAction;
+  @ManyToOne(() => Book, (book) => book.bookHistories, { onDelete: 'CASCADE' })
+  bookId: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  date: Date;
+  borrowDate: Date;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  borrow_date: Date;
+  @Column({ type: 'timestamp', nullable: true })
+  returnDate: Date;
+
+  @Column({ default: false })
+  overdue: boolean;
 }
