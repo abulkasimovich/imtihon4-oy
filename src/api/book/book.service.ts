@@ -44,7 +44,7 @@ export class BookService extends BaseService<
     }
 
     if (filters.year) {
-      query = query.andWhere('book.published_year = :year', {
+      query = query.andWhere('book.year = :year', {
         year: filters.year,
       });
     }

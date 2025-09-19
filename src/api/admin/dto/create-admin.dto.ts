@@ -11,7 +11,7 @@ export class CreateAdminDto {
   @ApiProperty({
     type: 'string',
     description: 'Username for admin',
-    example: 'Ali',
+    example: 'Aliboy',
   })
   @MinLength(5)
   @IsString()

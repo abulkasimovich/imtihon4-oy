@@ -128,6 +128,6 @@ export class LibrarianController {
   @Delete(':id')
   @ApiBearerAuth()
   remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.librarianService.delete(+id);
+    return this.librarianService.delete(id);
   }
 }

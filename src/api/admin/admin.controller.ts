@@ -187,61 +187,6 @@ export class AdminController {
   }
 
   @ApiOperation({
-    summary: 'Get all admins with pagination',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'All admins get successfully with pagination',
-    schema: {
-      example: {
-        statusCode: 200,
-        message: 'success',
-        data: [
-          {
-            ...adminData,
-          },
-        ],
-      },
-    },
-  })
-  @ApiResponse({
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
-    description: 'Error on get admins',
-    schema: {
-      example: {
-        statusCode: 500,
-        error: {
-          message: 'Internal server error',
-        },
-      },
-    },
-  })
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles(AccessRoles.SUPERADMIN)
-  @Get()
-  @ApiBearerAuth()
-  findAllWithPagination(@Query() queryDto: QueryPaginationDto) {
-    const { query, page, limit } = queryDto;
-    const where = query
-      ? {
-          username: ILike(`%${query}%`),
-          role: AccessRoles.ADMIN,
-          is_deleted: false,
-        }
-      : { role: AccessRoles.ADMIN, is_deleted: false };
-    return this.adminService.findAllWithPagination({
-      where,
-      select: {
-        id: true,
-        username: true,
-        is_active: true,
-      },
-      skip: page,
-      take: limit,
-    });
-  }
-
-  @ApiOperation({
     summary: 'Get all admins',
   })
   @ApiResponse({
@@ -324,7 +269,7 @@ export class AdminController {
   @Roles(AccessRoles.SUPERADMIN, 'ID')
   @Get(':id')
   @ApiBearerAuth()
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
+  findOne(@Param('id', ParseUUIDPipe) id: number) {
     return this.adminService.findOneById(+id, {
       where: { role: AccessRoles.ADMIN },
     });
@@ -463,6 +408,6 @@ export class AdminController {
     if (admin && admin.role === AccessRoles.SUPERADMIN) {
       throw new ForbiddenException('Deleting super admin is restricted');
     }
-    return this.adminService.delete(+id);
+    return this.adminService.delete(id);
   }
 }

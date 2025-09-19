@@ -122,6 +122,6 @@ export class ReaderController {
   @Delete(':id')
   @ApiBearerAuth()
   remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.readerService.delete(+id);
+    return this.readerService.delete(id);
   }
 }

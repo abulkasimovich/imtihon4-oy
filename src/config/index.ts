@@ -11,10 +11,10 @@ export const config = {
 
   DB_SYNC: String(process.env.NODE_ENV) === 'dev' ? true : false,
 
-  ACCESS_TOKEN_SECRET_KEY: String(process.env.ACCESS_SECRET_KEY),
-  ACCESS_TOKEN_TIME: String(process.env.ACCESS_TOKEN_TIME),
-  REFRESH_TOKEN_SECRET_KEY: String(process.env.REFRESH_SECRET_KEY),
-  REFRESH_TOKEN_TIME: String(process.env.REFRESH_TOKEN_TIME),
+  ACCESS_TOKEN_SECRET_KEY: String(process.env.ACCESS_SECRET_KEYC || 'library-access'),
+  ACCESS_TOKEN_TIME: String(process.env.ACCESS_TOKEN_TIME || '1d'),
+  REFRESH_TOKEN_SECRET_KEY: String(process.env.REFRESH_SECRET_KEY ||'library-refresh'),
+  REFRESH_TOKEN_TIME: String(process.env.REFRESH_TOKEN_TIME || '15d'),
 
   ADMIN_USERNAME: String(process.env.SUPER_ADMIN_USERNAME),
   ADMIN_PASSWORD: String(process.env.SUPER_ADMIN_PASSWORD),

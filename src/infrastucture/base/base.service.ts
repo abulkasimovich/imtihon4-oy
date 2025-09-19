@@ -29,11 +29,7 @@ export class BaseService<CreateDto, UpdateDto, Entity> {
     return getSuccessRes(data);
   }
 
-  async findAllWithPagination(
-    options?: IFindOptions<Entity>,
-  ): Promise<IResponsePagination> {
-    return await RepositoryPager.findAll(this.getRepository, options);
-  }
+
 
   async findOneBy(options: IFindOptions<Entity>): Promise<ISuccess> {
     const data = (await this.repository.findOne({
@@ -69,8 +65,8 @@ export class BaseService<CreateDto, UpdateDto, Entity> {
     return getSuccessRes(data);
   }
 
-  async delete(id: number): Promise<ISuccess> {
-    await this.findOneById(id);
+  async delete(id: string): Promise<ISuccess> {
+    await this.findOneById(Number(id));
     (await this.repository.delete(id)) as unknown as Entity;
     return getSuccessRes({});
   }

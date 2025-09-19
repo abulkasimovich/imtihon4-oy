@@ -74,7 +74,7 @@ export class BookController {
   @Roles(AccessRoles.ADMIN, AccessRoles.LIBRARIAN)
   @ApiOperation({ summary: 'Delete Book by id' })
   @ApiResponse({ status: 200, description: 'Book deleted successfully' })
-  remove(@Param('id', ParseIntPipe) id: number): Promise<IResponse> {
+  remove(@Param('id', ParseIntPipe) id: string): Promise<IResponse> {
     return this.bookService.delete(id);
   }
 }

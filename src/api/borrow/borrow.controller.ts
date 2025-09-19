@@ -58,7 +58,7 @@ export class BorrowController {
   @Roles(AccessRoles.ADMIN, AccessRoles.LIBRARIAN)
   @ApiOperation({ summary: 'Delete Borrow by id' })
   @ApiResponse({ status: 200, description: 'Borrow deleted successfully' })
-  remove(@Param('id', ParseIntPipe) id: number): Promise<IResponse> {
+  remove(@Param('id', ParseIntPipe) id: string): Promise<IResponse> {
     return this.borrowService.delete(id);
   }
 }

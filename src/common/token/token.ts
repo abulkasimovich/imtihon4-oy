@@ -11,7 +11,7 @@ export class TokenService {
   async accessToken(payload: IToken): Promise<string> {
     return this.jwt.signAsync(payload, {
       secret: config.ACCESS_TOKEN_SECRET_KEY,
-      expiresIn: config.ACCESS_TOKEN_TIME,
+  expiresIn: config.ACCESS_TOKEN_TIME,
     });
   }
 
