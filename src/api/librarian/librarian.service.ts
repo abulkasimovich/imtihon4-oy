@@ -59,19 +59,24 @@ export class LibrarianService extends BaseService<
   }
 
   async createLibrarian(createDto: CreateLibrarianDto) {
-    const { full_name, password } = createDto;
-    const exists = await this.librarianRepo.findOne({ where: { full_name } });
-    if (exists) throw new ConflictException('full_name already exists');
+  const { full_name, password, email } = createDto;
 
-    const hashed = await this.crypto.encrypt(password);
-    const newLibrarian = this.librarianRepo.create({
-      full_name,
-      hashed_password: hashed,
-      role: AccessRoles.LIBRARIAN,
-    });
-    await this.librarianRepo.save(newLibrarian);
-    return successRes(newLibrarian, 201);
-  }
+  const exists = await this.librarianRepo.findOne({ where: { full_name } });
+  if (exists) throw new ConflictException('full_name already exists');
+
+  const hashed = await this.crypto.encrypt(password);
+
+  const newLibrarian = this.librarianRepo.create({
+    full_name,
+    email,
+    hashed_password: hashed,
+    role: AccessRoles.LIBRARIAN,
+  });
+
+  await this.librarianRepo.save(newLibrarian);
+  return successRes(newLibrarian, 201);
+}
+
 
   async signIn(createDto: CreateLibrarianDto, res: Response) {
     const { full_name, password } = createDto;

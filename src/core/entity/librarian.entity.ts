@@ -7,7 +7,7 @@ export class LibrarianEntity extends BaseEntity {
   @Column({ type: 'varchar' })
   full_name: string;
 
-  @Column({ type: 'varchar', unique: true })
+  @Column({ type: 'varchar', unique: true, nullable: true })
   email: string;
 
   @Column({ type: 'varchar' })

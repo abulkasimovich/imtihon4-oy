@@ -57,12 +57,6 @@ export class ReaderController {
     return this.readerService.signIn(dto, res);
   }
 
-  @ApiOperation({ summary: 'Get new access token' })
-  @Post('token')
-  newToken(@CookieGetter('readerToken') token: string) {
-    return this.authService.newToken(this.readerService.getRepository, token);
-  }
-
   @ApiOperation({ summary: 'Sign out reader' })
   @Post('signout')
   signOut(

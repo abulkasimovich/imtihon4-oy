@@ -57,15 +57,6 @@ export class LibrarianController {
     return this.librarianService.signIn(dto, res);
   }
 
-  @ApiOperation({ summary: 'Get new access token' })
-  @Post('token')
-  newToken(@CookieGetter('librarianToken') token: string) {
-    return this.authService.newToken(
-      this.librarianService.getRepository,
-      token,
-    );
-  }
-
   @ApiOperation({ summary: 'Sign out librarian' })
   @Post('signout')
   signOut(
@@ -105,7 +96,7 @@ export class LibrarianController {
   ) {
     return this.librarianService.updateLibrarian(id, dto, user);
   }
-  
+
   @ApiOperation({ summary: 'Delete librarian by id' })
   @ApiParam({ name: 'id', type: 'string' })
   @UseGuards(AuthGuard, RolesGuard)

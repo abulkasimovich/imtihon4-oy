@@ -60,16 +60,21 @@ export class ReaderService extends BaseService<
   }
 
   async createReader(createDto: CreateReaderDto) {
-    const { full_name, password } = createDto;
+    const { full_name, password, email } = createDto;
+    
     const exists = await this.readerRepo.findOne({ where: { full_name } });
     if (exists) throw new ConflictException('full_name already exists');
-
-    const hashed = await this.crypto.encrypt(password);
+  
+    const hashed_password = await this.crypto.encrypt(password);
+  
     const newReader = this.readerRepo.create({
       full_name,
-      hashed_password: hashed,
+      email,
+      hashed_password,
       role: AccessRoles.READER,
     });
+    console.log('Danggg!!!');
+    
     await this.readerRepo.save(newReader);
     return successRes(newReader, 201);
   }

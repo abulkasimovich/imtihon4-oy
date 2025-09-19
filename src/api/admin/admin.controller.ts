@@ -114,39 +114,7 @@ export class AdminController {
     return this.adminService.signIn(signInDto, res);
   }
 
-  @ApiOperation({
-    summary: 'Get new access token',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'New access token get successfully',
-    schema: {
-      example: {
-        statusCode: 200,
-        message: 'success',
-        data: {
-          token: 'aslksfjo2i3n4n2309idsfn2i3jo423lj423kj',
-        },
-      },
-    },
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-    schema: {
-      example: {
-        statusCode: 400,
-        error: {
-          message: 'Refresh token expired',
-        },
-      },
-    },
-  })
-  @Post('token')
-  newToken(@CookieGetter('adminToken') token: string) {
-    return this.authService.newToken(this.adminService.getRepository, token);
-  }
-
+  
   @ApiOperation({
     summary: 'Sign out admin',
   })

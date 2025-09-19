@@ -10,7 +10,7 @@ export class CreateReaderDto {
   @IsEmail()
   email: string;
 
-  @ApiProperty({ example: 'Str0ngP@ssw0rd!' })
+  @ApiProperty({ example: 'Rustam123!' })
   @MinLength(6)
   password: string;
 }
