@@ -28,23 +28,25 @@ export class BorrowService extends BaseService<
   }
 
   async create(dto: CreateBorrowDto): Promise<IResponse> {
-    const reader = await this.readerRepo.findOne({
-      where: { id: dto.readerId },
-    });
+    const reader = await this.readerRepo.findOne({ where: { id: dto.readerId } });
     if (!reader) throw new NotFoundException('Reader not found');
 
     const book = await this.bookRepo.findOne({ where: { id: dto.bookId } });
     if (!book) throw new NotFoundException('Book not found');
 
     const entity = this.borrowRepo.create({
-      reader: { id: dto.readerId } as ReaderEntity,
-      book: { id: dto.bookId } as Book,
-      dueDate: dto.due_date,
+  reader: { id: dto.readerId } as ReaderEntity,
+  book: { id: dto.bookId } as Book,
+  dueDate: dto.due_date,
+
     });
 
     await this.borrowRepo.save(entity);
 
-    return getSuccessRes({ ...entity, reader, book }, 201);
+    return getSuccessRes(
+      { ...entity, reader, book },
+      201,
+    );
   }
 
   async updateBorrow(id: string, dto: UpdateBorrowDto): Promise<IResponse> {
@@ -71,12 +73,8 @@ export class BorrowService extends BaseService<
 
     return getSuccessRes({
       ...entity,
-      reader:
-        reader ??
-        (await this.readerRepo.findOne({ where: { id: entity.reader.id } })),
-      book:
-        book ??
-        (await this.bookRepo.findOne({ where: { id: entity.book.id } })),
+      reader: reader ?? (await this.readerRepo.findOne({ where: { id: entity.reader.id } })),
+      book: book ?? (await this.bookRepo.findOne({ where: { id: entity.book.id } })),
     });
   }
 }
