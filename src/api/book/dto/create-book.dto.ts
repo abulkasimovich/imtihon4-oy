@@ -2,7 +2,7 @@ import { IsNotEmpty, IsString, IsBoolean, IsInt, Min } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateBookDto {
-  @ApiProperty({ example: 'Clean Code', description: 'Book title' })
+  @ApiProperty({ example: 'Clean back', description: 'Book title' })
   @IsNotEmpty()
   @IsString()
   title: string;
