@@ -322,50 +322,6 @@ export class AdminController {
   }
 
   @ApiOperation({
-    summary: 'Delete admin by id (soft)',
-  })
-  @ApiParam({
-    name: 'id',
-    type: 'string',
-    example: 'e6b189ff-1d45-44e9-a252-5a0b48f3678f',
-    description: 'id of admin',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Admin deleted by id successfully (soft)',
-    schema: {
-      example: {
-        statusCode: 200,
-        message: 'success',
-        data: {
-          ...adminData,
-        },
-      },
-    },
-  })
-  @ApiResponse({
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
-    description: 'Error on deleting admin by id (soft)',
-    schema: {
-      example: {
-        statusCode: 500,
-        error: {
-          message: 'Internal server error',
-        },
-      },
-    },
-  })
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles(AccessRoles.SUPERADMIN)
-  @Patch('delete/:id')
-  @ApiBearerAuth()
-  async softDelete(@Param('id', ParseUUIDPipe) id: string) {
-    await this.adminService.findOneById(+id);
-    await this.adminService.getRepository.update({ id }, { is_deleted: true });
-    return this.adminService.findOneById(+id);
-  }
-
-  @ApiOperation({
     summary: 'Delete admin by id',
   })
   @ApiParam({

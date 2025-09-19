@@ -105,22 +105,7 @@ export class LibrarianController {
   ) {
     return this.librarianService.updateLibrarian(id, dto, user);
   }
-
-  @ApiOperation({ summary: 'Delete librarian by id (soft)' })
-  @ApiParam({ name: 'id', type: 'string' })
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles(AccessRoles.ADMIN)
-  @Patch('delete/:id')
-  @ApiBearerAuth()
-  async softDelete(@Param('id', ParseUUIDPipe) id: string) {
-    await this.librarianService.findOneById(+id);
-    await this.librarianService.getRepository.update(
-      { id },
-      { is_deleted: true },
-    );
-    return this.librarianService.findOneById(+id);
-  }
-
+  
   @ApiOperation({ summary: 'Delete librarian by id' })
   @ApiParam({ name: 'id', type: 'string' })
   @UseGuards(AuthGuard, RolesGuard)

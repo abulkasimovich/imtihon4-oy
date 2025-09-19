@@ -103,18 +103,6 @@ export class ReaderController {
     return this.readerService.updateReader(id, dto, user);
   }
 
-  @ApiOperation({ summary: 'Delete reader by id (soft)' })
-  @ApiParam({ name: 'id', type: 'string' })
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles(AccessRoles.ADMIN)
-  @Patch('delete/:id')
-  @ApiBearerAuth()
-  async softDelete(@Param('id', ParseUUIDPipe) id: string) {
-    await this.readerService.findOneById(+id);
-    await this.readerService.getRepository.update({ id }, { is_deleted: true });
-    return this.readerService.findOneById(+id);
-  }
-
   @ApiOperation({ summary: 'Delete reader by id' })
   @ApiParam({ name: 'id', type: 'string' })
   @UseGuards(AuthGuard, RolesGuard)
