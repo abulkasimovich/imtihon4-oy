@@ -57,6 +57,17 @@ export class BookHistoryController {
     return this.bookHistoryService.findOneById(id);
   }
 
+  @Get()
+  @Roles(AccessRoles.ADMIN, AccessRoles.LIBRARIAN)
+  @ApiOperation({ summary: 'Get BookHistory by id' })
+  @ApiResponse({
+    status: 200,
+    description: 'BookHistories retrieved successfully',
+  })
+  findAll(){
+    return this.bookHistoryService.findAll();
+  }
+
   @Delete(':id')
   @Roles(AccessRoles.ADMIN, AccessRoles.LIBRARIAN)
   @ApiOperation({ summary: 'Delete BookHistory by id' })

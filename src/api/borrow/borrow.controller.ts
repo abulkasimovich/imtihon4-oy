@@ -54,6 +54,14 @@ export class BorrowController {
     return this.borrowService.findOneById(id);
   }
 
+  @Get()
+  @Roles(AccessRoles.ADMIN, AccessRoles.LIBRARIAN)
+  @ApiOperation({ summary: 'Get all Borrows ' })
+  @ApiResponse({ status: 200, description: 'Borrows retrieved successfully' })
+  findAll() {
+    return this.borrowService.findAll();
+  }
+
   @Delete(':id')
   @Roles(AccessRoles.ADMIN, AccessRoles.LIBRARIAN)
   @ApiOperation({ summary: 'Delete Borrow by id' })
