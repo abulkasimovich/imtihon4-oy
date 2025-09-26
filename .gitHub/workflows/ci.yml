@@ -7,8 +7,17 @@ jobs:
   Repository_yuklash:
     runs-on: ubuntu-latest
     steps:
-      - name: Repositoryni Githubga yuklash
-        uses: actions/checkout
+      - name: Repo yuklanyapti
+        uses: actions/checkout@v4
 
       - name: Node.js ornatish
         uses: actions/setup-node
+
+    install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repo yuklanyapti
+      - uses: actions/checkout@v4
+
+      - name: node_modules papkasini o'rnatish
+        run: npm install
