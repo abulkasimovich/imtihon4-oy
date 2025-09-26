@@ -10,5 +10,5 @@ jobs:
       - name: Repositoryni Githubga yuklash
         uses: actions/checkout
 
-        -name: Node.js ornatish
+      - name: Node.js ornatish
         uses: actions/setup-node
